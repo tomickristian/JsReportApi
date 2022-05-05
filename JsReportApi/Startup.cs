@@ -1,3 +1,4 @@
+using JsReportApi.Services;
 using JsReportApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,14 +23,15 @@ namespace JsReportApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-            //services.AddDbContext<TVRASPOREDContext>(options => options.UseSqlServer(Configuration.GetConnectionString("tvRasporedConnString")));
+            services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+            services.AddDbContext<TVRASPOREDContext>(options => options.UseSqlServer(Configuration.GetConnectionString("tvRasporedConnString")));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
