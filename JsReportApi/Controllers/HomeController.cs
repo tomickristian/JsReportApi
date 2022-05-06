@@ -11,14 +11,18 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using jsreport.Shared;
+using jsreport.AspNetCore;
 
 namespace JsReportApi.Controllers
 {
     public class HomeController : Controller
     {
+        private IJsReportMVCService _renderService;
         private readonly TvRasporedService _tvRasporedService;
-        public HomeController()
+        public HomeController(IJsReportMVCService jsReportMVCService)
         {
+            _renderService = jsReportMVCService;
             _tvRasporedService = new TvRasporedService();
         }
 
@@ -30,8 +34,7 @@ namespace JsReportApi.Controllers
         [HttpGet]
         public async Task<Stream> TvPostajeHtml()
         {
-            var rs = new ReportingService("http://localhost:5488", "admin", "admin");
-            var report = await rs.RenderByNameAsync("TvPostajeReport", _tvRasporedService.DohvatiTvPostaje());
+            var report = await _renderService.RenderByNameAsync("TvPostajeReport", _tvRasporedService.DohvatiTvPostaje());
             return report.Content;
         }
     }

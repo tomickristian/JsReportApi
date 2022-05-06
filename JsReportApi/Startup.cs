@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using jsreport.AspNetCore;
+using jsreport.Client;
+using jsreport.Shared;
 
 namespace JsReportApi
 {
@@ -30,6 +33,8 @@ namespace JsReportApi
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             services.AddDbContext<TVRASPOREDContext>(options => options.UseSqlServer(Configuration.GetConnectionString("tvRasporedConnString")));
+            services.AddJsReport(new ReportingService("http://localhost:5488", "admin", "admin"));
+            services.AddScoped<IJsReportMVCService, JsReportMVCService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
