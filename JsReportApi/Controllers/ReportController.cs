@@ -16,26 +16,31 @@ using jsreport.AspNetCore;
 
 namespace JsReportApi.Controllers
 {
-    public class HomeController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ReportController : ControllerBase
     {
         private IJsReportMVCService _renderService;
         private readonly TvRasporedService _tvRasporedService;
-        public HomeController(IJsReportMVCService jsReportMVCService)
+        public ReportController(IJsReportMVCService jsReportMVCService)
         {
             _renderService = jsReportMVCService;
             _tvRasporedService = new TvRasporedService();
         }
 
-        public IActionResult Index()
+        [HttpGet("TvPostajeHtml")]
+        public async Task<IActionResult> TvPostajeHtml()
         {
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<Stream> TvPostajeHtml()
-        {
-            var report = await _renderService.RenderByNameAsync("TvPostajeReport", _tvRasporedService.DohvatiTvPostaje());
-            return report.Content;
+            
+            try
+            {
+                var report = await _renderService.RenderByNameAsync("TvPostajeReport", _tvRasporedService.DohvatiTvPostaje());
+                return Ok(report.Content);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
