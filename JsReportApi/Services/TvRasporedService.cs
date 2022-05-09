@@ -21,5 +21,10 @@ namespace JsReportApi.Services
         {
             return new TvPostajeDTO(_context.Tvpostajas.Include(t => t.Emisijas).ToList());
         }
+
+        public EmisijeDTO DohvatiEmisijeTvPostaje(int tvPostaja_id)
+        {
+            return new EmisijeDTO(_context.Emisijas.Where(e => e.TvpostajaId == tvPostaja_id).ToList());
+        }
     }
 }

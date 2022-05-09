@@ -31,10 +31,23 @@ namespace JsReportApi.Controllers
         [HttpGet("TvPostajeHtml")]
         public async Task<IActionResult> TvPostajeHtml()
         {
-            
             try
             {
                 var report = await _renderService.RenderByNameAsync("TvPostajeReport", _tvRasporedService.DohvatiTvPostaje());
+                return Ok(report.Content);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("EmisijeTvPostajeHtml/{tvPostaja_id}")]
+        public async Task<IActionResult> EmisijeTvPostajeHtml([FromRoute]int tvPostaja_id)
+        {
+            try
+            {
+                var report = await _renderService.RenderByNameAsync("EmisijeTvPostajeReport", _tvRasporedService.DohvatiEmisijeTvPostaje(tvPostaja_id));
                 return Ok(report.Content);
             }
             catch (Exception ex)
